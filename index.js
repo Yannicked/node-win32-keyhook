@@ -21,8 +21,13 @@ function create() { // first argument is a callback for key_down, second is a ar
 		cb_up = arguments[1];
 	}
 	console.log(cb_up);
+	
 	c_up = ffi.Callback('void', [ref.types.uint32], cb_up);
 	c_down = ffi.Callback('void', [ref.types.uint32], cb_down);
+	process.on('exit', function() {
+		c_up;
+		c_down;
+	});
 	return keyhook.Create(c_down, c_up);
 }
 
@@ -30,9 +35,5 @@ function destroy() { // destroy will clear the callbacks, this should be called 
 	return keyhook.Destroy();
 }
 
-process.on('exit', function() {
-    c_up;
-	c_down;
-});
 
 module.exports = {create: create, destroy: destroy};
