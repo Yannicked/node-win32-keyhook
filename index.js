@@ -1,5 +1,6 @@
 var ffi = require('ffi');
 var ref = require('ref');
+var path = require('path')
 
 var keyhook = ffi.Library(path.join(__dirname, 'bin', 'keyhook.'+process.arch+'.dll'), {
 		'Create': ['bool', ['pointer', 'pointer']],
