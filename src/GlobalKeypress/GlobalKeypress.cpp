@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "GlobalKeypress.h"
+#include <iostream>
 
 void CALLBACK dllcallback(DWORD keycode);
 typedef void CALLBACK CallbackFunc(DWORD);
@@ -18,18 +19,22 @@ HHOOK keyboardHook{ NULL };
 
 LRESULT CALLBACK LowLevelKeyBoardProc(const int nCode, const WPARAM wParam, const LPARAM lParam) {
 	PKBDLLHOOKSTRUCT press = (PKBDLLHOOKSTRUCT)lParam;
+	DWORD vkCode = press->vkCode;
+	if (vkCode == 0x0d && (press->flags & LLKHF_EXTENDED) != 0) {
+		vkCode = 0x0e;
+	}
 	switch (wParam) {
 	case WM_KEYDOWN:
-		callbackDown(press->vkCode);
+		callbackDown(vkCode);
 		break;
 	case WM_SYSKEYDOWN:
-		callbackDown(press->vkCode);
+		callbackDown(vkCode);
 		break;
 	case WM_KEYUP:
-		callbackUp(press->vkCode);
+		callbackUp(vkCode);
 		break;
 	case WM_SYSKEYUP:
-		callbackUp(press->vkCode);
+		callbackUp(vkCode);
 		break;
 	}
 	return CallNextHookEx(keyboardHook, nCode, wParam, lParam);

@@ -19,9 +19,7 @@ function create() { // first argument is a callback for key_down, second is a ar
 		cb_up = function() {};
 	} else {
 		cb_up = arguments[1];
-	}
-	console.log(cb_up);
-	
+	}	
 	c_up = ffi.Callback('void', [ref.types.uint32], cb_up);
 	c_down = ffi.Callback('void', [ref.types.uint32], cb_down);
 	process.on('exit', function() {
